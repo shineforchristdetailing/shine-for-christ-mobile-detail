@@ -1,0 +1,32 @@
+---
+import SEOHead from '../components/SEOHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import StickyCTA from '../components/StickyCTA.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+}
+
+const { title, description, canonical } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead title={title} description={description} canonical={canonical} />
+  </head>
+  <body class="font-sans text-dark bg-white">
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <StickyCTA />
+    <!-- Bottom padding on mobile for sticky CTA -->
+    <div class="h-14 md:hidden"></div>
+  </body>
+</html>

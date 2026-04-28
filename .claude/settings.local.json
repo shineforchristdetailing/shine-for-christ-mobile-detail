@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(npx astro:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm run:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(curl -s http://localhost:4321)",
+      "WebFetch(domain:www.facebook.com)",
+      "WebSearch",
+      "WebFetch(domain:m.facebook.com)",
+      "Bash(pkill -f \"astro dev\")",
+      "Bash(curl -s http://localhost:4322)",
+      "Bash(pkill -f \"astro\")"
+    ]
+  }
+}

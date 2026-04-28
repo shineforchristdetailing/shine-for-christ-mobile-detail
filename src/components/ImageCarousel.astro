@@ -1,0 +1,182 @@
+---
+import { business } from '../data/business';
+
+interface Props {
+  images: { src: string; alt: string; caption?: string }[];
+}
+
+const { images } = Astro.props;
+---
+
+<section class="py-20 bg-light">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="text-center mb-10">
+      <p class="text-primary font-semibold uppercase tracking-wide text-sm mb-2">
+        Recent Work
+      </p>
+      <h2 class="text-3xl md:text-5xl font-extrabold text-dark mb-4">
+        See the Difference
+      </h2>
+      <p class="text-gray max-w-2xl mx-auto text-base md:text-lg">
+        Real mobile detailing results from real customers around the Tampa Bay area.
+      </p>
+    </div>
+
+    <div class="relative max-w-5xl mx-auto" id="carousel">
+      <div class="relative overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-black/5">
+        <div id="carousel-track" class="flex transition-transform duration-500 ease-out">
+          {images.map((image, i) => (
+            <figure class="w-full flex-shrink-0 relative bg-black" data-index={i}>
+              <img
+                src={image.src}
+                alt={image.alt}
+                class="w-full h-[360px] sm:h-[480px] md:h-[620px] object-contain bg-neutral-950"
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding={i === 0 ? 'sync' : 'async'}
+              />
+
+              {image.caption && (
+                <figcaption class="absolute left-0 right-0 bottom-0 bg-gradient-to-t from-black/80 via-black/45 to-transparent px-5 py-6 md:px-8 md:py-8">
+                  <p class="text-white font-bold text-lg md:text-2xl drop-shadow">
+                    {image.caption}
+                  </p>
+                </figcaption>
+              )}
+            </figure>
+          ))}
+        </div>
+
+        <button
+          id="carousel-prev"
+          class="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 bg-white/95 hover:bg-white text-dark shadow-xl rounded-full w-11 h-11 md:w-13 md:h-13 flex items-center justify-center transition z-10"
+          aria-label="Previous image"
+          type="button"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <button
+          id="carousel-next"
+          class="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 bg-white/95 hover:bg-white text-dark shadow-xl rounded-full w-11 h-11 md:w-13 md:h-13 flex items-center justify-center transition z-10"
+          aria-label="Next image"
+          type="button"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="mt-5 grid grid-cols-6 gap-2 md:gap-3" id="carousel-thumbnails">
+        {images.map((image, i) => (
+          <button
+            class:list={[
+              'group rounded-xl overflow-hidden border-2 transition bg-white shadow-sm',
+              i === 0 ? 'border-primary opacity-100' : 'border-transparent opacity-60 hover:opacity-100'
+            ]}
+            data-dot={i}
+            aria-label={`Go to image ${i + 1}`}
+            type="button"
+          >
+            <img
+              src={image.src}
+              alt=""
+              class="w-full h-16 sm:h-20 md:h-24 object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <p class="text-center mt-8">
+      <a
+        href={`${business.facebook}photos/`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 text-[#1877F2] font-bold hover:underline"
+      >
+        See more photos on Facebook
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
+      </a>
+    </p>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById('carousel-track');
+  const prev = document.getElementById('carousel-prev');
+  const next = document.getElementById('carousel-next');
+  const dots = document.querySelectorAll('[data-dot]');
+
+  if (track && prev && next) {
+    const total = track.children.length;
+    let current = 0;
+    let startX = 0;
+    let autoplay: ReturnType<typeof setInterval>;
+
+    function updateThumbs() {
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('border-primary', i === current);
+        dot.classList.toggle('border-transparent', i !== current);
+        dot.classList.toggle('opacity-100', i === current);
+        dot.classList.toggle('opacity-60', i !== current);
+      });
+    }
+
+    function goTo(index: number) {
+      current = ((index % total) + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      updateThumbs();
+    }
+
+    function startAutoplay() {
+      autoplay = setInterval(() => goTo(current + 1), 6000);
+    }
+
+    function stopAutoplay() {
+      clearInterval(autoplay);
+    }
+
+    prev.addEventListener('click', () => {
+      stopAutoplay();
+      goTo(current - 1);
+      startAutoplay();
+    });
+
+    next.addEventListener('click', () => {
+      stopAutoplay();
+      goTo(current + 1);
+      startAutoplay();
+    });
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        stopAutoplay();
+        goTo(Number(dot.getAttribute('data-dot')));
+        startAutoplay();
+      });
+    });
+
+    track.addEventListener('touchstart', (e) => {
+      stopAutoplay();
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+
+    track.addEventListener('touchend', (e) => {
+      const diff = startX - e.changedTouches[0].clientX;
+
+      if (Math.abs(diff) > 50) {
+        goTo(diff > 0 ? current + 1 : current - 1);
+      }
+
+      startAutoplay();
+    }, { passive: true });
+
+    startAutoplay();
+  }
+</script>
