@@ -1,6 +1,5 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import ContactForm from '../components/ContactForm.astro';
 import CTASection from '../components/CTASection.astro';
 import { business } from '../data/business';
 
@@ -79,5 +78,4 @@ const { city, title, description, content, nearbyAreas } = Astro.props;
   </section>
 
   <CTASection />
-  <ContactForm heading={`Contact Us in ${city}`} />
 </BaseLayout>

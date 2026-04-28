@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ContactForm from '../components/ContactForm.astro';
 import { business } from '../data/business';
 ---
 
@@ -67,23 +66,6 @@ import { business } from '../data/business';
           <p class="text-sm text-gray mt-1">See our latest work</p>
         </a>
       </div>
-    </div>
-  </section>
-
-  <!-- Contact Form -->
-  <ContactForm heading="Send Us a Message" />
-
-  <!-- Service Area -->
-  <section class="py-16 bg-white">
-    <div class="max-w-4xl mx-auto px-4 text-center">
-      <h2 class="text-2xl font-bold text-dark mb-4">Service Area</h2>
-      <p class="text-gray mb-6">We provide mobile auto detailing throughout the {business.primaryCity}, including:</p>
-      <div class="flex flex-wrap justify-center gap-3">
-        {business.serviceAreas.map((city) => (
-          <span class="bg-light border border-gray-light rounded-full px-4 py-2 text-sm font-medium text-dark">{city}</span>
-        ))}
-      </div>
-      <p class="text-sm text-gray mt-6">Don't see your city? Contact us — we may still serve your area.</p>
     </div>
   </section>
 </BaseLayout>
